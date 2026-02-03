@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>전주 한옥마을 혼잡도 대시보드</title>
+    <title>전북 관광지 혼잡도 대시보드</title>
     <style>
         * {
             margin: 0;
@@ -26,7 +26,7 @@
         header {
             text-align: center;
             color: white;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
 
         header h1 {
@@ -40,13 +40,105 @@
             opacity: 0.9;
         }
 
-        .update-info {
+        /* 검색 영역 */
+        .search-section {
+            background: rgba(255,255,255,0.95);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+        }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .search-btn {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .search-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* 지역 태그 */
+        .area-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .area-tag {
+            padding: 8px 14px;
+            background: #f0f0f0;
+            border: 2px solid transparent;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .area-tag:hover {
+            background: #e0e0ff;
+            border-color: #667eea;
+        }
+
+        .area-tag.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .area-tag .emoji {
+            margin-right: 4px;
+        }
+
+        /* 현재 선택 지역 표시 */
+        .current-area {
             background: rgba(255,255,255,0.2);
             padding: 10px 20px;
             border-radius: 20px;
             display: inline-block;
             margin-top: 10px;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
+            color: white;
+        }
+
+        .current-area .emoji {
+            font-size: 1.2rem;
+            margin-right: 6px;
+        }
+
+        .update-info {
+            background: rgba(255,255,255,0.15);
+            padding: 8px 16px;
+            border-radius: 15px;
+            display: inline-block;
+            margin-top: 8px;
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.9);
         }
 
         .cards-container {
@@ -248,6 +340,42 @@
             color: white;
         }
 
+        /* 카테고리 필터 */
+        .category-filter {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+
+        .category-btn {
+            padding: 6px 12px;
+            background: transparent;
+            border: 1px solid #ccc;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .category-btn:hover, .category-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .area-group {
+            margin-bottom: 12px;
+        }
+
+        .area-group-title {
+            font-size: 0.8rem;
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 8px;
+            padding-left: 4px;
+        }
+
         @media (max-width: 600px) {
             header h1 {
                 font-size: 1.5rem;
@@ -255,18 +383,54 @@
             .score-value {
                 font-size: 2.5rem;
             }
+            .search-box {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>🏘️ 전주 한옥마을 혼잡도</h1>
+            <h1>🏛️ 전북 관광지 혼잡도</h1>
             <p>실시간 혼잡도 및 주차 난이도 대시보드</p>
+            <div class="current-area" id="current-area">
+                <span class="emoji">🏘️</span>
+                <span id="current-area-name">전주 한옥마을</span>
+            </div>
             <div class="update-info" id="update-info">
                 마지막 업데이트: 로딩 중...
             </div>
         </header>
+
+        <!-- 검색 섹션 -->
+        <div class="search-section">
+            <div class="search-box">
+                <input type="text" class="search-input" id="search-input" 
+                       placeholder="지역명, 카테고리로 검색 (예: 한옥, 시장, 마이산...)"
+                       onkeypress="if(event.key==='Enter') searchAreas()">
+                <button class="search-btn" onclick="searchAreas()">🔍 검색</button>
+            </div>
+            
+            <!-- 카테고리 필터 -->
+            <div class="category-filter">
+                <button class="category-btn active" onclick="filterByCategory('all', this)">전체</button>
+                <button class="category-btn" onclick="filterByCategory('전주시', this)">전주시</button>
+                <button class="category-btn" onclick="filterByCategory('전북', this)">전북 기타</button>
+            </div>
+
+            <!-- 지역 태그 목록 -->
+            <div id="area-tags-container">
+                <div class="area-group" id="jeonju-areas">
+                    <div class="area-group-title">📍 전주시</div>
+                    <div class="area-tags" id="jeonju-tags"></div>
+                </div>
+                <div class="area-group" id="jeonbuk-areas">
+                    <div class="area-group-title">🗺️ 전북 기타 지역</div>
+                    <div class="area-tags" id="jeonbuk-tags"></div>
+                </div>
+            </div>
+        </div>
 
         <div id="content">
             <div class="loading">
@@ -279,7 +443,7 @@
             <button class="btn btn-primary" onclick="fetchStatus()">
                 🔄 지금 새로고침
             </button>
-            <a class="btn btn-secondary" href="/api/status" target="_blank">
+            <a class="btn btn-secondary" id="json-link" href="/api/status?area=jeonju-hanok" target="_blank">
                 📊 JSON 보기
             </a>
         </div>
@@ -287,6 +451,7 @@
         <footer>
             <p>5초마다 자동 갱신 | 현재 더미 데이터 기반</p>
             <p style="margin-top: 5px;">
+                <a href="/api/areas">/api/areas</a> · 
                 <a href="/api/status">/api/status</a> · 
                 <a href="/health">/health</a>
             </p>
@@ -294,6 +459,9 @@
     </div>
 
     <script>
+        // 현재 선택된 지역
+        let currentAreaId = 'jeonju-hanok';
+        let allAreas = [];
         let lastData = null;
 
         function getLevelClass(level) {
@@ -325,9 +493,119 @@
             });
         }
 
+        // 지역 목록 로드
+        async function loadAreas() {
+            try {
+                const response = await fetch('/api/areas');
+                const data = await response.json();
+                allAreas = data.areas;
+                renderAreaTags(allAreas);
+            } catch (error) {
+                console.error('Failed to load areas:', error);
+            }
+        }
+
+        // 지역 태그 렌더링
+        function renderAreaTags(areas) {
+            const jeonjuTags = document.getElementById('jeonju-tags');
+            const jeonbukTags = document.getElementById('jeonbuk-tags');
+            
+            jeonjuTags.innerHTML = '';
+            jeonbukTags.innerHTML = '';
+
+            areas.forEach(area => {
+                const tag = document.createElement('button');
+                tag.className = `area-tag ${area.id === currentAreaId ? 'active' : ''}`;
+                tag.innerHTML = `<span class="emoji">${area.emoji}</span>${area.name_kr}`;
+                tag.onclick = () => selectArea(area.id, tag);
+
+                if (area.region === '전주시') {
+                    jeonjuTags.appendChild(tag);
+                } else {
+                    jeonbukTags.appendChild(tag);
+                }
+            });
+        }
+
+        // 지역 선택
+        function selectArea(areaId, element) {
+            currentAreaId = areaId;
+            
+            // 태그 활성화 상태 업데이트
+            document.querySelectorAll('.area-tag').forEach(tag => {
+                tag.classList.remove('active');
+            });
+            element.classList.add('active');
+            
+            // JSON 링크 업데이트
+            document.getElementById('json-link').href = `/api/status?area=${areaId}`;
+            
+            // 데이터 새로고침
+            fetchStatus();
+        }
+
+        // 검색
+        function searchAreas() {
+            const query = document.getElementById('search-input').value.trim();
+            if (!query) {
+                renderAreaTags(allAreas);
+                document.getElementById('jeonju-areas').style.display = 'block';
+                document.getElementById('jeonbuk-areas').style.display = 'block';
+                return;
+            }
+
+            const filtered = allAreas.filter(area => 
+                area.name_kr.includes(query) ||
+                area.name.toLowerCase().includes(query.toLowerCase()) ||
+                area.category.includes(query) ||
+                area.region.includes(query)
+            );
+            
+            // 필터 결과에 따라 그룹 표시/숨김
+            const hasJeonju = filtered.some(a => a.region === '전주시');
+            const hasJeonbuk = filtered.some(a => a.region !== '전주시');
+            document.getElementById('jeonju-areas').style.display = hasJeonju ? 'block' : 'none';
+            document.getElementById('jeonbuk-areas').style.display = hasJeonbuk ? 'block' : 'none';
+            
+            renderAreaTags(filtered);
+        }
+
+        // 카테고리 필터
+        function filterByCategory(category, btn) {
+            // 버튼 활성화 상태 업데이트
+            document.querySelectorAll('.category-btn').forEach(b => {
+                b.classList.remove('active');
+            });
+            btn.classList.add('active');
+            
+            // 검색창 초기화
+            document.getElementById('search-input').value = '';
+
+            if (category === 'all') {
+                document.getElementById('jeonju-areas').style.display = 'block';
+                document.getElementById('jeonbuk-areas').style.display = 'block';
+                renderAreaTags(allAreas);
+            } else if (category === '전주시') {
+                document.getElementById('jeonju-areas').style.display = 'block';
+                document.getElementById('jeonbuk-areas').style.display = 'none';
+                renderAreaTags(allAreas.filter(a => a.region === '전주시'));
+            } else {
+                document.getElementById('jeonju-areas').style.display = 'none';
+                document.getElementById('jeonbuk-areas').style.display = 'block';
+                renderAreaTags(allAreas.filter(a => a.region !== '전주시'));
+            }
+        }
+
         function renderDashboard(data) {
             const levelClassNow = getLevelClass(data.level_now);
             const levelClass30m = getLevelClass(data.level_30m);
+
+            // 현재 지역 표시 업데이트
+            document.getElementById('current-area').innerHTML = `
+                <span class="emoji">${data.emoji}</span>
+                <span id="current-area-name">${data.area_kr}</span>
+                <span style="opacity: 0.8; font-size: 0.85rem; margin-left: 8px;">(${data.region})</span>
+            `;
 
             const html = `
                 <div class="cards-container">
@@ -423,11 +701,16 @@
 
         async function fetchStatus() {
             try {
-                const response = await fetch('/api/status');
+                const response = await fetch(`/api/status?area=${currentAreaId}`);
                 if (!response.ok) {
                     throw new Error(`HTTP ${response.status}`);
                 }
                 const data = await response.json();
+                
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+                
                 lastData = data;
                 renderDashboard(data);
             } catch (error) {
@@ -436,11 +719,17 @@
             }
         }
 
-        // 초기 로드
-        fetchStatus();
+        // 초기화
+        async function init() {
+            await loadAreas();
+            await fetchStatus();
+            
+            // 5초마다 자동 갱신
+            setInterval(fetchStatus, 5000);
+        }
 
-        // 5초마다 자동 갱신
-        setInterval(fetchStatus, 5000);
+        // 페이지 로드 시 초기화
+        init();
     </script>
 </body>
 </html>
