@@ -1,173 +1,107 @@
-# 전주 한옥마을 혼잡/주차 난이도 MVP
+# Jeonju Hanok Village Traffic & Crowd Insight (전북 디지털 시드 캠프 · 우수상 2등)
 
-전주 한옥마을의 실시간 혼잡도와 주차 난이도를 확인할 수 있는 대시보드입니다.
+![Poster](./assets/poster.png)
 
-## 📋 기능
+> **수상:** 전북 디지털 시드 캠프 **우수상(2등)**  
+> **대회 특징:** **하루(1-day)** 안에 *문제 정의 → 솔루션 제시 → (가능 범위) 구현 → 발표*까지 완료하는 실전 프로젝트  
+> **노션(팀 공유 페이지):** https://www.notion.so/1-2fc42fd1015480b3aebbe214374dd528?source=copy_link
 
-- **실시간 혼잡도 표시**: 현재 한옥마을의 혼잡 상태를 확인
-- **30분 뒤 예측**: 향후 혼잡도 예측 정보 제공
-- **난이도 점수**: 0~100 점수로 방문 난이도 표시
-- **자동 갱신**: 5초마다 데이터 자동 업데이트
-- **레벨 표시**: EASY / MODERATE / HARD / VERY_HARD
+![Award](./assets/award.jpg)
 
-## 🚀 로컬 실행
+---
 
-```bash
-# 의존성 설치
-pip install -r requirements.txt
+## 1) 프로젝트 한 줄 요약
+전주 한옥마을의 **교통 혼잡·주차난**이 전북 관광 수입에 미치는 손실을 문제로 정의하고,  
+**실시간 혼잡 예측 + 대안 이동(MaaS) 유도 + 보행 안전/혼잡 관리**까지 확장 가능한 “스마트 모빌리티 & AI IoT 플랫폼” 컨셉의 솔루션을 제안했습니다. :contentReference[oaicite:2]{index=2}
 
-# 서버 실행
-python -m uvicorn app:app --host 0.0.0.0 --port 8000
-```
+---
 
-접속: http://localhost:8000/
+## 2) 문제 정의(Why)
+한옥마을은 피크 시간대에 반복적으로
+- 진입로 정체 및 불법 주정차
+- 주차난(공영/민영 가격·수용 한계)
+- 관광 동선 혼잡
+이 발생해 관광객 만족도/재방문/소비에 영향을 줄 수 있습니다.
 
-## ☁️ Kakao Cloud VM (ver1) 배포
+본 프로젝트는 이를 **교통 정보 제공과 수요 분산 전략**으로 완화하여,
+“교통이 풀리면 지역 경제의 혈관이 뚫린다”라는 메시지로 지역 관광 활성화를 목표로 했습니다. :contentReference[oaicite:3]{index=3}
 
-### 1. SSH 접속
+---
 
-```bash
-ssh -i ver1_key.pem ubuntu@<PUBLIC_IP>
-```
+## 3) 대회 제약과 MVP 범위(1-day 해커톤 현실)
+이 대회는 **하루 안에** 문제 정의부터 솔루션 제시, 최소 구현, 발표까지 끝내야 했습니다.  
+물리적으로 시간이 부족하여, 본 레포에서는 **프론트엔드 중심 MVP(서비스 틀)**을 우선 구현했고  
+발표에서는 아래 “향후 구현 계획”을 **구체적인 실행 단계로** 제시했습니다.
 
-### 2. 환경 설정 및 실행
+---
 
-```bash
-# 시스템 업데이트 및 패키지 설치
-sudo apt update
-sudo apt install -y python3-pip git
+## 4) 솔루션 컨셉(발표안)
+발표자료 기준 솔루션은 3개 축으로 구성했습니다. :contentReference[oaicite:4]{index=4}
 
-# 레포지토리 클론
-git clone https://github.com/<USERNAME>/camp.git
-cd camp
+1. **AI Traffic Prediction (지능형 수요 관리)**  
+   - IoT 센서/영상 기반으로 정체를 예측하고 사전 분산
+2. **Smart MaaS (관광 연계 이동)**  
+   - 외곽 주차장 + 셔틀/공유 모빌리티로 한옥마을 접근 최적화
+3. **Safe Walking Zone (보행자 안전·혼잡)**  
+   - 사고 다발/혼잡 구역을 인지해 보행 안전 확보
 
-# 의존성 설치
-pip3 install -r requirements.txt
+---
 
-# 서버 실행
-python3 -m uvicorn app:app --host 0.0.0.0 --port 8000
-```
+## 5) 내가 맡은 역할(My Role)
+팀은 3인으로 진행되었고, 저는 **구현/개발을 단독으로 담당**했습니다.
 
-### 3. 보안 그룹 설정
+- **구현(단독):** MVP 프론트엔드/서비스 틀 구현(사용자 화면 흐름, 실시간 갱신 구조 설계)
+- **배포/운영(단독):** Kakao Cloud VM에 서비스 실행 환경 구성 및 동작 확인
+- **발표 기여:** 구현 파트 발표 및 Q&A 대응
 
-Kakao Cloud 콘솔에서 인바운드 규칙 추가:
-- **프로토콜**: TCP
-- **포트**: 8000
-- **소스**: 0.0.0.0/0 (또는 특정 IP)
+팀원들은 문제 정의/아이디어 구상, 발표자료 제작 및 발표 진행을 담당했습니다.
 
-### 4. 접속
+---
 
-```
-http://<PUBLIC_IP>:8000/
-```
+## 6) (향후 구현) 실제 서비스로 확장하는 로드맵
+> 발표에서 제시한 “시간이 충분할 때의 구현 계획”을 **현실적인 단계**로 정리했습니다.
 
-## 🔄 백그라운드 실행
+### 6.1 데이터 확보
+- **학과 GPU 서버**로 학습 환경 확보
+- Roboflow / Kaggle / 오픈 데이터셋에서 **차량 바운딩박스 이미지** 확보
+- 가능하다면 전주 지역 CCTV 프레임을 추가 수집하여 도메인 적합성 강화
 
-```bash
-nohup python3 -m uvicorn app:app --host 0.0.0.0 --port 8000 > server.log 2>&1 &
-```
+### 6.2 모델 학습(차량/보행자 객체탐지)
+- 차량 탐지 → 프레임 내 차량 수(방향별) 추정 → 도로 혼잡 지표로 변환
+- 사람 탐지(확장) → 보행 혼잡/웨이팅(줄 서 있는 사람) 추정
 
-로그 확인:
-```bash
-tail -f server.log
-```
+### 6.3 실시간 운영(영상 입력)
+- 카카오/네이버 지도 등에서 제공되는 CCTV 영상 또는 지자체 CCTV 소스/API를 확보(가능한 방식 탐색)
+- 실시간 영상에서 **일부 프레임만 샘플링**하여 추론 비용 최소화
+- CCTV 메타정보(위치/도로 방향/관광지 유입 방향)를 함께 관리하여
+  “어느 방향의 증가가 한옥마을 혼잡을 유발하는지”까지 반영
 
-프로세스 종료:
-```bash
-pkill -f uvicorn
-```
+### 6.4 사용자 행동 추천(서비스 핵심)
+- 목적지가 혼잡하면 **외곽 주차 + 도보/대중교통** 등 대안 추천
+- 보행 혼잡/웨이팅이 높은 구간은 **혼잡 회피 동선** 안내
 
-## 🛠️ (선택) systemd 서비스 등록
+### 6.5 안전/상황 확장(사고·기상)
+- 실시간 교통사고 접수/발생 구간 API 연동이 가능하다면,
+  사고 구간을 안내하고 우회를 추천
+- 눈/비 등 기상 악화 시 사고 위험을 함께 경고하여 안전한 이동을 지원
 
-```bash
-# 서비스 파일 생성
-sudo nano /etc/systemd/system/hanok-mvp.service
-```
+### 6.6 확장성
+- 전주/전북 관광지에서 검증 후 **전국 관광지**로 확장
+- 해외 관광객 대상(다국어/관광 동선 추천)으로 확장 가능
 
-```ini
-[Unit]
-Description=Jeonju Hanok Village MVP
-After=network.target
+---
 
-[Service]
-User=ubuntu
-WorkingDirectory=/home/ubuntu/camp
-ExecStart=/usr/bin/python3 -m uvicorn app:app --host 0.0.0.0 --port 8000
-Restart=always
-RestartSec=10
+## 7) Presentation / Docs
+- 발표자료(PDF, **중간본**): [presentation_mid.pdf](./assets/presentation_mid.pdf)  
+  - 최종본을 찾으면 해당 파일을 교체 예정입니다.
 
-[Install]
-WantedBy=multi-user.target
-```
+---
 
-```bash
-# 서비스 활성화 및 시작
-sudo systemctl daemon-reload
-sudo systemctl enable hanok-mvp
-sudo systemctl start hanok-mvp
+## 8) Repository Notes
+- 본 레포는 **1-day 캠프 환경**에서 “서비스 형태(UX/구조)”를 우선 완성한 MVP입니다.
+- 실데이터 연동/모델 학습/운영 파이프라인은 상단 로드맵에 따라 확장 가능합니다.
 
-# 상태 확인
-sudo systemctl status hanok-mvp
-```
+---
 
-## 📁 프로젝트 구조
-
-```
-camp/
-├── app.py              # FastAPI 백엔드
-├── requirements.txt    # Python 의존성
-├── static/
-│   └── index.html      # 프론트엔드 대시보드
-└── README.md           # 이 문서
-```
-
-## 📡 API 엔드포인트
-
-| 엔드포인트 | 메서드 | 설명 |
-|-----------|--------|------|
-| `/` | GET | 대시보드 HTML 페이지 |
-| `/api/status` | GET | 혼잡도/난이도 JSON 데이터 |
-| `/health` | GET | 헬스체크 |
-
-### `/api/status` 응답 예시
-
-```json
-{
-  "area": "Jeonju Hanok Village",
-  "area_kr": "전주 한옥마을",
-  "now_kst": "2026-02-03T14:30:00+09:00",
-  "traffic_index_now": 0.65,
-  "traffic_index_forecast_30m": 0.72,
-  "parking_pressure_now": 0.58,
-  "difficulty_now_0_100": 68,
-  "difficulty_30m_0_100": 74,
-  "level_now": "HARD",
-  "level_30m": "HARD",
-  "message": "현재 한옥마을이 혼잡합니다. 대중교통 이용을 권장합니다. 🟠",
-  "message_30m": "30분 뒤 한옥마을이 혼잡합니다. 대중교통 이용을 권장합니다. 🟠",
-  "notes": "현재 더미(룰 기반) 데이터로 동작 중입니다. 추후 실시간 교통/주차 API 연동 예정."
-}
-```
-
-## 🔮 향후 계획 (실데이터 연동)
-
-현재는 더미(룰 기반) 데이터로 동작합니다. 
-실데이터 연동 시 `app.py`의 `get_realtime_features()` 함수만 교체하면 됩니다:
-
-```python
-def get_realtime_features() -> Tuple[float, float]:
-    """
-    실데이터 연동 시 이 함수를 수정:
-    - 네이버/카카오 실시간 교통 API
-    - 전주시 공공데이터 주차장 API
-    - 방문객 수 실시간 데이터
-    """
-    # API 호출 로직
-    traffic_index = call_traffic_api()
-    parking_pressure = call_parking_api()
-    return traffic_index, parking_pressure
-```
-
-## 📝 라이선스
-
-MIT License
+## Links
+- Team Notion: https://www.notion.so/1-2fc42fd1015480b3aebbe214374dd528?source=copy_link
