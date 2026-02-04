@@ -1,4 +1,4 @@
-# Jeonju Hanok Village Traffic & Crowd Insight (전북 디지털 시드 캠프 · 우수상 2등)
+# Jeonju Hanok Village Traffic & Crowd Insight (전북 디지털 시드 캠프 · 2등_우수상)
 
 ![Poster](./assets/poster.png)
 
