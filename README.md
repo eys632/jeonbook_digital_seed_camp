@@ -13,7 +13,7 @@
 
 ## 0) Quick Links
 - 발표자료(대회 발표본으로 간주): [presentation_mid.pdf](./assets/presentation_mid.pdf)  
-- 발표자료(대회 이후 보완본/확장본): [AI_Mobility_Tourism_Transformation.pdf](C:\Users\eys63\GitHub\camp\assets\AI_Mobility_Tourism_Transformation.pdf)
+- 발표자료(대회 이후 보완본/확장본): [AI_Mobility_Tourism_Transformation.pdf](./assets/AI_Mobility_Tourism_Transformation.pdf)
 
 ---
 
@@ -165,7 +165,7 @@ python3 -m uvicorn app:app --host 0.0.0.0 --port 8000
 
 ## 10) Presentation / Docs
 - 발표자료(PDF, 대회 발표본으로 간주): [presentation_mid.pdf](./assets/presentation_mid.pdf)
-- 발표자료(PDF, 대회 이후 보완본): [AI_Mobility_Tourism_Transformation.pdf](C:\Users\eys63\GitHub\camp\assets\AI_Mobility_Tourism_Transformation.pdf)
+- 발표자료(PDF, 대회 이후 보완본): [AI_Mobility_Tourism_Transformation.pdf](./assets/AI_Mobility_Tourism_Transformation.pdf)
 
 
 ## Links
