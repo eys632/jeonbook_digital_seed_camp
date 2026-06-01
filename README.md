@@ -119,8 +119,8 @@
 
 ### 8.2 Run locally
 ```bash
-git clone https://github.com/eys632/jeonbook_digital_seed_camp.git
-cd jeonbook_digital_seed_camp
+git clone https://github.com/eys632/jeonbuk_digital_seed_camp.git
+cd jeonbuk_digital_seed_camp
 
 python -m venv .venv
 # Windows: .venv\Scripts\activate
@@ -138,8 +138,8 @@ python -m uvicorn app:app --host 0.0.0.0 --port 8000
 sudo apt update
 sudo apt install -y git python3-pip
 
-git clone https://github.com/eys632/jeonbook_digital_seed_camp.git
-cd jeonbook_digital_seed_camp
+git clone https://github.com/eys632/jeonbuk_digital_seed_camp.git
+cd jeonbuk_digital_seed_camp
 
 pip3 install -r requirements.txt
 python3 -m uvicorn app:app --host 0.0.0.0 --port 8000
